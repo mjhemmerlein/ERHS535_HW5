@@ -1,0 +1,49 @@
+---
+title: "Homework_5"
+author: "Meg Hemmerlein"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      error = FALSE)
+```
+
+# Choice 2: Recreate Graph
+
+# Load libraries \
+```{r}
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(lubridate)
+```
+
+# Clean data
+```{r}
+
+homicides <- read.csv("Raw_Data/homicide-data.csv")
+
+baltimore <- homicides %>%
+  mutate(city = str_trim(city, side = "right")) %>%
+  mutate(city_name = paste0(city,", ", state)) %>%
+  filter(city_name == "Baltimore, MD") %>%
+  mutate(reported_date = ymd(reported_date)) %>%
+  mutate(month = month(reported_date)) %>%
+  mutate(season = case_when(
+    month %in% c(11,12,1:4) ~ "Winter",
+    month %in% c(5:10) ~ "Summer")) %>%
+  group_by(month, season) %>%
+  summarize(homicides = n())
+```
+
+
+
+
+
+
+
+
