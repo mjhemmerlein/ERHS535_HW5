@@ -25,7 +25,7 @@ library(ggplot2)
 ```
 
 # Clean data
-```{r fig.width=8, fig.height=2}
+```{r}
 
 # Read the data
 homicides <- read.csv("Raw_Data/homicide-data.csv")
@@ -49,7 +49,7 @@ baltimore <- homicides %>%
 ```
 
 
-```{r}
+```{r fig.width=8, fig.height=2}
 # Create the plot
 ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) + 
   geom_col() +
@@ -60,7 +60,9 @@ ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) +
   labs(x = "Year",
        y = "Monthly Homicides",
        title = "Homicides in Baltimore, MD") +
-  theme(panel.grid.minor.x = element_blank())
+  geom_smooth(method = NULL, aes(group = 1), color = "blue", size = 1, se = FALSE, span = 0.1, show.legend = F) +
+  theme(legend.position = "bottom", legend.title = element_blank())
+
 ```
 
 
