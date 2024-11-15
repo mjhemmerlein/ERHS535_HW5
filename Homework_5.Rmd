@@ -20,30 +20,48 @@ library(tidyverse)
 library(dplyr)
 library(readr)
 library(lubridate)
+library(stringr)
+library(ggplot2)
 ```
 
 # Clean data
-```{r}
+```{r fig.width=8, fig.height=2}
 
+# Read the data
 homicides <- read.csv("Raw_Data/homicide-data.csv")
 
+# Process the data
 baltimore <- homicides %>%
-  mutate(city = str_trim(city, side = "right")) %>%
-  mutate(city_name = paste0(city,", ", state)) %>%
+  mutate(city = str_trim(city, side = "right"),
+         city_name = paste0(city, ", ", state)) %>%
   filter(city_name == "Baltimore, MD") %>%
-  mutate(reported_date = ymd(reported_date)) %>%
-  mutate(month = month(reported_date)) %>%
-  mutate(season = case_when(
-    month %in% c(11,12,1:4) ~ "Winter",
-    month %in% c(5:10) ~ "Summer")) %>%
-  group_by(month, season) %>%
-  summarize(homicides = n())
+  mutate(reported_date = ymd(reported_date),
+         month = month(reported_date),
+         year = year(reported_date),
+         season = case_when(
+           month %in% c(11, 12, 1, 2, 3, 4) ~ "Winter",
+           month %in% c(5, 6, 7, 8, 9, 10) ~ "Summer")) %>%
+  group_by(month, year, season) %>%
+  summarize(homicides = n(), .groups = 'drop') %>%
+  arrange(year, month) %>%
+  mutate(month_year = paste(year, sprintf("%02d", month), "01", sep = "-") %>% 
+         as.Date())
 ```
 
 
-
-
-
+```{r}
+# Create the plot
+ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) + 
+  geom_col() +
+  scale_fill_manual(values = c("Winter" = "lightblue", "Summer" = "lightgray")) +
+  scale_x_date(date_breaks = "12 months",
+               date_labels = "%Y") +
+  theme_dark() +
+  labs(x = "Year",
+       y = "Monthly Homicides",
+       title = "Homicides in Baltimore, MD") +
+  theme(panel.grid.minor.x = element_blank())
+```
 
 
 
