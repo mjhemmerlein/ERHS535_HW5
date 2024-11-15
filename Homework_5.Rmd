@@ -46,10 +46,15 @@ baltimore <- homicides %>%
   arrange(year, month) %>%
   mutate(month_year = paste(year, sprintf("%02d", month), "01", sep = "-") %>% 
          as.Date())
+
+freddie_gray <- as.Date("2015-04-12")
+freddie_gray_label <- as.Date("2015-03-01")
+arrest_label <- "Arrest of\nFreddie Gray"
+  
 ```
 
 
-```{r fig.width=8, fig.height=2}
+```{r fig.width=8, fig.height=2.5}
 # Create the plot
 ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) + 
   geom_col() +
@@ -57,11 +62,25 @@ ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) +
   scale_x_date(date_breaks = "12 months",
                date_labels = "%Y") +
   theme_dark() +
-  labs(x = "Year",
+  labs(x = "Date",
        y = "Monthly Homicides",
        title = "Homicides in Baltimore, MD") +
   geom_smooth(method = NULL, aes(group = 1), color = "blue", size = 1, se = FALSE, span = 0.1, show.legend = F) +
-  theme(legend.position = "bottom", legend.title = element_blank())
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  annotate("text", 
+           x = freddie_gray_label, 
+           y = 40, 
+           label = arrest_label,
+           color = "white",
+           size = 3, 
+           hjust = 1,
+           vjust = 0.5) +
+  geom_vline(xintercept = freddie_gray, color = "red", linetype = "dashed", size = 1) +
+  theme(
+    axis.title.x = element_text(size = 9),  # Change the size of x-axis label
+    axis.title.y = element_text(size = 9)   # Change the size of y-axis label
+  )
+
 
 ```
 
