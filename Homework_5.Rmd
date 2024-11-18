@@ -12,9 +12,10 @@ knitr::opts_chunk$set(echo = TRUE,
                       error = FALSE)
 ```
 
-# Choice 2: Recreate Graph
+## Choice 2: Recreate Graph
 
-# Load libraries \
+### Load the libraries
+
 ```{r}
 library(tidyverse)
 library(dplyr)
@@ -24,9 +25,9 @@ library(stringr)
 library(ggplot2)
 ```
 
-# Clean data
-```{r}
+### Clean the data
 
+```{r}
 # Read the data
 homicides <- read.csv("Raw_Data/homicide-data.csv")
 
@@ -53,9 +54,10 @@ freddie_gray_label <- as.Date("2015-03-01")
 arrest_label <- "Arrest of\nFreddie Gray"
 ```
 
+### Plot the data
 
 ```{r fig.width=8, fig.height=2.5}
-# Create the plot
+# Plot
 ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) + 
   geom_col() +
   scale_fill_manual(values = c("Winter" = "lightblue", "Summer" = "lightgray")) +
@@ -80,6 +82,3 @@ ggplot(baltimore, aes(x = month_year, y = homicides, fill = season)) +
     axis.title.x = element_text(size = 9),
     axis.title.y = element_text(size = 9))
 ```
-
-
-
